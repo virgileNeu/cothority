@@ -121,7 +121,7 @@ func (p *ExtendRoster) HandleExtendRoster(msg ProtoStructExtendRoster) error {
 
 func (p *ExtendRoster) isBlockAccepted(sender *network.ServerIdentity, block *SkipBlock) bool {
 	// Search for matching skipchain-ids
-	log.Lvlf3("%s: checking block with skipchainid: %x", p.ServerIdentity(), block.SkipChainID())
+	// log.Lvlf3("%s: checking block with skipchainid: %x", p.ServerIdentity(), block.SkipChainID())
 	for _, id := range p.FollowerIDs {
 		if block.SkipChainID().Equal(id) {
 			log.Lvlf3("%s: Found skipchain-id", p.ServerIdentity())
