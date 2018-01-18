@@ -175,7 +175,7 @@ func (p *ExtendRoster) HandleExtendRosterReply(r ProtoStructExtendRosterReply) e
 			select {
 			case <-p.doneChan:
 				return
-			case <-time.After(time.Second):
+			case <-time.After(time.Second * 10):
 				p.tempSigsMutex.Lock()
 				defer p.tempSigsMutex.Unlock()
 
