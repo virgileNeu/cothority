@@ -21,7 +21,7 @@ import (
 	"github.com/dedis/onet/log"
 )
 
-const timeout = 1
+const timeout = 10
 
 // VerificationFunction can be passes to each protocol node. It will be called
 // (in a go routine) during the (start/handle) challenge prepare phase of the
