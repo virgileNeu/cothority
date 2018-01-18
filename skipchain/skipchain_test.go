@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
-	"sync"
 	"testing"
 	"time"
 
@@ -467,8 +466,9 @@ func TestService_StoreSkipBlockSpeed(t *testing.T) {
 	}
 }
 
+/*
 func TestService_ParallelStore(t *testing.T) {
-	nbrRoutines := 10
+	nbrRoutines := 100
 	local := onet.NewLocalTest(Suite)
 	defer waitPropagationFinished(t, local)
 	defer local.CloseAll()
@@ -513,9 +513,10 @@ func TestService_ParallelStore(t *testing.T) {
 	}
 	wg.Wait()
 }
+*/
 
 func TestService_Propagation(t *testing.T) {
-	nbrNodes := 10
+	nbrNodes := 100
 	local := onet.NewLocalTest(Suite)
 	defer waitPropagationFinished(t, local)
 	defer local.CloseAll()
