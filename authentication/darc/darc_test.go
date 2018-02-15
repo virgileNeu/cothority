@@ -9,14 +9,14 @@ import (
 )
 
 func TestNewDarc(t *testing.T) {
-	desc := []byte("mydarc")
+	data := []byte("mydarc")
 	var users, owner []*Identity
 	owner = append(owner, createIdentity())
 	for i := 0; i < 2; i++ {
 		users = append(users, createIdentity())
 	}
-	d := NewDarc(&owner, &users, desc)
-	require.Equal(t, &desc, d.Description)
+	d := NewDarc(&owner, &users, data)
+	require.Equal(t, &data, d.Data)
 	require.Equal(t, *owner[0], *(*d.Owners)[0])
 	for i, user := range users {
 		require.Equal(t, *user, *(*d.Users)[i])
@@ -25,22 +25,22 @@ func TestNewDarc(t *testing.T) {
 
 // Checks that when a Darc1 is copied to Darc2,
 // adding a user to Darc1 does not add it to Darc2,
-// and changing description and version in Darc1
+// and changing data and version in Darc1
 // does not change them in Darc2.
 func TestDarc_Copy(t *testing.T) {
 	d1 := createDarc("testdarc1").darc
 	d2 := d1.Copy()
 	(*d1.Owners)[0] = createIdentity()
 	d1.Version = 3
-	desc := []byte("testdarc2")
-	d1.Description = &desc
+	data := []byte("testdarc2")
+	d1.Data = &data
 	d1.AddUser(createIdentity())
 	require.NotEqual(t, (*d1.Owners)[0], (*d2.Owners)[0])
 	require.NotEqual(t, len(*d1.Users), len(*d2.Users))
-	require.NotEqual(t, d1.Description, d2.Description)
+	require.NotEqual(t, d1.Data, d2.Data)
 	require.NotEqual(t, d1.Version, d2.Version)
 
-	d1.Description = nil
+	d1.Data = nil
 	d2 = d1.Copy()
 	require.Equal(t, d1.GetID(), d2.GetID())
 }
@@ -153,7 +153,7 @@ type testDarc struct {
 	usersI  []*Identity
 }
 
-func createDarc(desc string) *testDarc {
+func createDarc(data string) *testDarc {
 	td := &testDarc{}
 	for i := 0; i < 2; i++ {
 		s, id := createSignerIdentity()
@@ -163,7 +163,7 @@ func createDarc(desc string) *testDarc {
 		td.users = append(td.users, s)
 		td.usersI = append(td.usersI, id)
 	}
-	td.darc = NewDarc(&td.ownersI, &td.usersI, []byte(desc))
+	td.darc = NewDarc(&td.ownersI, &td.usersI, []byte(data))
 	return td
 }
 

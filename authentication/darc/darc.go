@@ -28,7 +28,7 @@ import (
 )
 
 // NewDarc initialises a darc-structure given its owners and users
-func NewDarc(owners *[]*Identity, users *[]*Identity, desc []byte) *Darc {
+func NewDarc(owners *[]*Identity, users *[]*Identity, data []byte) *Darc {
 	var ow, us []*Identity
 	if owners != nil {
 		ow = append(ow, *owners...)
@@ -36,14 +36,14 @@ func NewDarc(owners *[]*Identity, users *[]*Identity, desc []byte) *Darc {
 	if users != nil {
 		us = append(us, *users...)
 	}
-	if desc == nil {
-		desc = []byte{}
+	if data == nil {
+		data = []byte{}
 	}
 	return &Darc{
 		Owners:      &ow,
 		Users:       &us,
 		Version:     0,
-		Description: &desc,
+		Data: &data,
 		Signature:   nil,
 	}
 }
@@ -62,9 +62,9 @@ func (d *Darc) Copy() *Darc {
 		users := append([]*Identity{}, *d.Users...)
 		dCopy.Users = &users
 	}
-	if d.Description != nil {
-		desc := *(d.Description)
-		dCopy.Description = &desc
+	if d.Data != nil {
+		data := *(d.Data)
+		dCopy.Data = &data
 	}
 	return dCopy
 }

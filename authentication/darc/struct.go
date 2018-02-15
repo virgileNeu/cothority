@@ -12,7 +12,7 @@ func init() {
 }
 
 // ID is the identity of a Darc - which is the sha256 of its protobuf representation
-// over invariant fields [Owners, Users, Version, Description]. Signature is excluded.
+// over invariant fields [Owners, Users, Version, Data]. Signature is excluded.
 // An evolving Darc will change its identity.
 type ID []byte
 
@@ -45,12 +45,12 @@ type Darc struct {
 	Users *[]*Identity
 	// Version should be monotonically increasing over the evolution of a Darc.
 	Version int
-	// Description is a free-form field that can hold any data as required by the user.
+	// Data is a free-form field that can hold any data as required by the user.
 	// Darc itself will never depend on any of the data in here.
-	Description *[]byte
+	Data *[]byte
 	// BaseID is the ID of the first darc of this Series
 	BaseID *ID
-	// Signature is calculated over the protobuf representation of [Owner, Users, Version, Description]
+	// Signature is calculated over the protobuf representation of [Owner, Users, Version, Data]
 	// and needs to be created by an Owner from the previous valid Darc.
 	Signature *Signature
 }
