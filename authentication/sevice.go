@@ -1,41 +1,10 @@
 // Package authentication centralizes authentication for services like
-// skipchain, cisc, pop and others who need it. It is based on the policy
+// skipchain, cisc, pop and others who need it. This first version simply
+// holds a list of all authentication tokens that are allowed to do
+// things with this conode. A later version will include policy-darcs to
+// correctly authenticate using modern tools.
+// It is based on the policy
 // library from Sandra Siby which is based on the darc-library from Linus.
-//
-// Authentication with policy-darcs
-//
-// The authentication service keeps track of access policies with the policy
-// darcs. Upon startup, there is on policy darc with the following setup:
-//   Policy: "admin"
-//   User: "public_key_of_conode"
-//   Policy: "*"
-//   User: "public_key_of_conode"
-// This means that by using the private key of the conode, the policy can
-// be evolved. Also by using the private key of the conode, the policy can
-// authenticate against all services.
-//
-// The policies should at least support the following methods of authentication:
-//   - ed25519 public key authentication
-//   - X509 public key authentication
-//   - Darc authentication
-// Future implementations might also do the following:
-//   - PoP authentication
-//   - CISC authentication - having a darc on a skipchain and following its
-//     latest version thereon
-//
-// ServiceProcessor for services to follow authentication
-//
-// For authentication, it offers a new ServiceProcessor that can be embedded
-// in the service instead of onet.ServiceProcessor. When registering a
-// handler, the handler gets a new argument of type Authentication:
-//   type Authentication struct{
-//     Signature *darc.Signature
-//     IP net.Address
-//   }
-// The Signature field can be nil in case there hasn't been a policy set up
-// for the service. This can happen if the admin decides to change the standard
-// policy and removes the `Policy:"*"`. Then everybody is allowed to connect
-// to all services that use authentication.
 //
 // API for the clients
 //
@@ -43,6 +12,18 @@
 // their messages that is of type `policy.Signature` and is the first field
 // available. In the protobuf definition this field is optional, as under some
 // circumstances it might be nil.
+//
+// Usage of Darcs
+//
+// Distributed Access Rights Control is a data structure for handling access
+// rights to given resources. A darc has a list of Owners who are allowed
+// to propose a new version of the darc. It also has a list of Users who are
+// allowed to sign as authentication for the execution of an action defined
+// by the darc.
+//
+// Both Owners and Users can point to other darcs, so that a general admin
+// darc can point to speicific user darcs and then each user darc can
+// update his access rights without having to contact the admin darc.
 //
 // On the API side, the following methods are available:
 //   // GetPolicy returns the latest version of the chosen policy with the ID
