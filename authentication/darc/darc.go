@@ -40,11 +40,11 @@ func NewDarc(owners *[]*Identity, users *[]*Identity, data []byte) *Darc {
 		data = []byte{}
 	}
 	return &Darc{
-		Owners:      &ow,
-		Users:       &us,
-		Version:     0,
-		Data: &data,
-		Signature:   nil,
+		Owners:    &ow,
+		Users:     &us,
+		Version:   0,
+		Data:      &data,
+		Signature: nil,
 	}
 }
 

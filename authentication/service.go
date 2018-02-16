@@ -37,17 +37,51 @@
 // of the service separated with a '.' from the method. For example to protect
 // the `CreateSkipchain` method of the identity service, the client would have to
 // create a darc with a 'Data' of 'Identity.CreateSkipchain'.
+//
+// How a service should use it
+//
+// Each service that wants to use authentication can include the following
+// structure in its api-messages sent from the client:
+//
+//  type Auth struct{
+//    Signature darc.Signature
+//  }
+//
+// on the service-side, the skipchain-method has to call
+//
+//  authentication.Verify(s onet.Service, service, method string, auth Auth) error
 package authentication
 
 import (
 	"errors"
+	"log"
+
+	"github.com/dedis/onchain-secrets/darc"
+	"github.com/dedis/onet"
 )
 
 const ServiceName = "authentication"
 
 // Service for the auhtentication holds all darcs that define who is allowed
 // to do what. It interacts with the users through the api.
-type Service struct{}
+type Service struct {
+	*onet.ServiceProcessor
+}
+
+// Auth can be included in an api-client-message to send an authentication to
+// the service.
+type Auth struct {
+	Signature darc.Signature
+}
+
+// Verify checks the signature on the message given by "service.method"
+// by going through all darcs and looking if one of the darc-policies matches the
+// message and if the signature is correct.
+func Verify(s onet.Context, service, method string, auth Auth) error {
+	authService := s.Service(ServiceName).(*Service)
+	log.Print(authService)
+	return nil
+}
 
 // GetPolicy returns the latest version of the chosen policy with the ID
 // given. If the ID == null, the latest version of the
